@@ -10,10 +10,8 @@ steps:
   - name: test
     image: 72636c/stratus:latest-alpine
     commands:
-      - stratus delete || true
       - stratus stage
       - stratus deploy
-      - stratus delete
     environment:
       AWS_ACCESS_KEY_ID:
         from_secret: aws_access_key_id
@@ -62,4 +60,4 @@ steps:
 
 ---
 kind: signature
-hmac: 45489e8ef5f55a90aea8817259d7d3c2cfa0f1d6baa52d7d21c3532235246411
+hmac: 4f462f006486c57a5396f8920bad7784dd50dbb1bd271e24ecfee31eceb949a1
