@@ -29,7 +29,7 @@ Resources:
     Properties:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AdministratorAccess
-      UserName: !Sub ${AWS::Region}/${Environment}/cicd/drone
+      UserName: !Sub ${AWS::Region}.${Environment}.cicd.drone
 
   Key:
     Type: AWS::KMS::Key
