@@ -20,8 +20,7 @@ steps:
     pull: always
     when:
       event:
-        # - pull_request
-        - push
+        - pull_request
 
   - name: deploy
     image: 72636c/stratus:latest-alpine
@@ -42,4 +41,4 @@ steps:
 
 ---
 kind: signature
-hmac: ea5ffe388c4e021975fd18347bf0627905a00612c2ea556818ce9bed5b586dbc
+hmac: 76192f1135de677da052a84df1fd4e981c11ef80ceb008f7d4571e4150e592a0
