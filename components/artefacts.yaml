@@ -35,7 +35,7 @@ Resources:
   Key:
     Type: AWS::KMS::Key
     Properties:
-      Description: Artefacts
+      Description: !Sub Artefacts (${Environment})
       EnableKeyRotation: true
       KeyPolicy:
         Statement:
