@@ -7,6 +7,23 @@ platform:
   arch: amd64
 
 steps:
+  - name: test
+    image: 72636c/stratus:latest-alpine
+    commands:
+      - stratus stage
+      - stratus deploy
+    environment:
+      AWS_ACCESS_KEY_ID:
+        from_secret: aws_access_key_id
+      AWS_REGION: ap-southeast-2
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: aws_secret_access_key
+      ENVIRONMENT: test
+    pull: always
+    when:
+      event:
+        - pull_request
+
   - name: stage
     image: 72636c/stratus:latest-alpine
     commands:
@@ -17,6 +34,7 @@ steps:
       AWS_REGION: ap-southeast-2
       AWS_SECRET_ACCESS_KEY:
         from_secret: aws_secret_access_key
+      ENVIRONMENT: prod
     pull: always
     when:
       event:
@@ -32,6 +50,7 @@ steps:
       AWS_REGION: ap-southeast-2
       AWS_SECRET_ACCESS_KEY:
         from_secret: aws_secret_access_key
+      ENVIRONMENT: prod
     pull: always
     when:
       branch:
@@ -41,4 +60,4 @@ steps:
 
 ---
 kind: signature
-hmac: 76192f1135de677da052a84df1fd4e981c11ef80ceb008f7d4571e4150e592a0
+hmac: 4f462f006486c57a5396f8920bad7784dd50dbb1bd271e24ecfee31eceb949a1
