@@ -1,0 +1,9 @@
+stacks:
+  - name: aws-bedrock-artefacts
+
+    capabilities: []
+    parameters: []
+    terminationProtection: true
+
+    policyFile: ./policy.json
+    templateFile: ./components/artefacts.yaml
