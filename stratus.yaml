@@ -13,7 +13,7 @@ stacks:
   - name: '{{env:ENVIRONMENT}}-aws-bedrock-cicd'
 
     capabilities:
-      - CAPABILITY_IAM
+      - CAPABILITY_NAMED_IAM
     parameters:
       - key: Environment
         value: '{{env:ENVIRONMENT}}'
