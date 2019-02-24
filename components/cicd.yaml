@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Description: 'AWS Bedrock: CI/CD'
+
+Parameters:
+  Environment:
+    AllowedValues:
+      - test
+      - prod
+    Type: String
+
+Resources:
+  DroneAccessKey:
+    Type: AWS::IAM::AccessKey
+    Properties:
+      Serial: 0
+      Status: Active
+      UserName: !Ref DroneUser
+
+  DroneSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      KmsKeyId: !Ref Key
+      Name: !Sub /${Environment}/cicd/drone
+      SecretString: !Sub '{"AccessKeyId": "${DroneAccessKey}", "SecretAccessKey": "${DroneAccessKey.SecretAccessKey}"}'
+
+  DroneUser:
+    Type: AWS::IAM::User
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+      UserName: !Sub ${AWS::Region}/${Environment}/cicd/drone
+
+  Key:
+    Type: AWS::KMS::Key
+    Properties:
+      Description: !Sub CI/CD (${Environment})
+      EnableKeyRotation: true
+      KeyPolicy:
+        Statement:
+          - Action: kms:*
+            Effect: Allow
+            Principal:
+              AWS: !Ref AWS::AccountId
+            Resource: '*'
+            Sid: Allow access for Key Administrators
+        Version: '2012-10-17'
