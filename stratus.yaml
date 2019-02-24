@@ -9,3 +9,15 @@ stacks:
 
     policyFile: ./policy.json
     templateFile: ./components/artefacts.yaml
+
+  - name: '{{env:ENVIRONMENT}}-aws-bedrock-cicd'
+
+    capabilities:
+      - CAPABILITY_NAMED_IAM
+    parameters:
+      - key: Environment
+        value: '{{env:ENVIRONMENT}}'
+    terminationProtection: true
+
+    policyFile: ./policy.json
+    templateFile: ./components/cicd.yaml
