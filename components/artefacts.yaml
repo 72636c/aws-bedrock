@@ -21,7 +21,7 @@ Resources:
   BucketNameParameter:
     Type: AWS::SSM::Parameter
     Properties:
-      Name: artefacts/bucket-name
+      Name: /artefacts/bucket-name
       Type: String
       Value: !Ref Bucket
 
