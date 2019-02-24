@@ -25,12 +25,14 @@ Resources:
       Description: Artefacts
       EnableKeyRotation: true
       KeyPolicy:
-        - Action: kms:*
-          Effect: Allow
-          Principal:
-            AWS: !Ref AWS::AccountId
-          Resource: '*'
-          Sid: Allow access for Key Administrators
+        Statement:
+          - Action: kms:*
+            Effect: Allow
+            Principal:
+              AWS: !Ref AWS::AccountId
+            Resource: '*'
+            Sid: Allow access for Key Administrators
+        Version: '2012-10-17'
 
 Outputs:
   BucketArn:
