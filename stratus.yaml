@@ -2,7 +2,9 @@ stacks:
   - name: aws-bedrock-artefacts-{{env:ENVIRONMENT}}
 
     capabilities: []
-    parameters: []
+    parameters:
+      - key: Environment
+        value: '{{env:ENVIRONMENT}}'
     terminationProtection: true
 
     policyFile: ./policy.json
