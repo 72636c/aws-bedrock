@@ -1,5 +1,5 @@
 stacks:
-  - name: aws-bedrock-artefacts
+  - name: aws-bedrock-artefacts-{{env:ENVIRONMENT}}
 
     capabilities: []
     parameters: []
