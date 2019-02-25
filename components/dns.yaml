@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Conditions:
+  IsProd: !Equals
+    - !Ref Environment
+    - prod
+
+Description: 'AWS Bedrock: DNS'
+
+Parameters:
+  Environment:
+    AllowedValues:
+      - test
+      - prod
+    Type: String
+
+Resources:
+  72636cDotCcHostedZone:
+    Condition: IsProd
+    Type: AWS::Route53::HostedZone
+    Properties:
+      Name: 72636c.cc.
+
+  72636cDotComHostedZone:
+    Condition: IsProd
+    Type: AWS::Route53::HostedZone
+    Properties:
+      Name: 72636c.com.
