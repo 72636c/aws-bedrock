@@ -21,3 +21,14 @@ stacks:
 
     policyFile: ./policy.json
     templateFile: ./components/cicd.yaml
+
+  - name: '{{env:ENVIRONMENT}}-aws-bedrock-dns'
+
+    capabilities: []
+    parameters:
+      - key: Environment
+        value: '{{env:ENVIRONMENT}}'
+    terminationProtection: true
+
+    policyFile: ./policy.json
+    templateFile: ./components/dns.yaml
