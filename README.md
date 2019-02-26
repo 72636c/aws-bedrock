@@ -8,9 +8,16 @@ AWS base infrastructure.
 
 - Artefacts
 - CI/CD
+- DNS
 
 ## Pipeline
 
-1. `test` (stage and deploy) changes with test stacks
-1. `stage` changes with prod stacks
-1. `deploy` changes with prod stacks
+Pull requests:
+
+- `stage` changes with `test` stacks
+- `deploy` changes with `test` stacks
+- `stage` changes with `prod` stacks
+
+Default branch:
+
+- `deploy` changes with `prod` stacks

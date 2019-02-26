@@ -6,50 +6,61 @@ platform:
   os: linux
   arch: amd64
 
+x-defaults:
+  environment: &environment
+    AWS_ACCESS_KEY_ID:
+      from_secret: aws_access_key_id
+    AWS_REGION: ap-southeast-2
+    AWS_SECRET_ACCESS_KEY:
+      from_secret: aws_secret_access_key
+
 steps:
-  - name: test
+  - name: stage (test)
     image: 72636c/stratus:latest-alpine
     commands:
       - stratus stage
-      - stratus deploy
     environment:
-      AWS_ACCESS_KEY_ID:
-        from_secret: aws_access_key_id
-      AWS_REGION: ap-southeast-2
-      AWS_SECRET_ACCESS_KEY:
-        from_secret: aws_secret_access_key
+      <<: *environment
       ENVIRONMENT: test
     pull: always
     when:
       event:
         - pull_request
 
-  - name: stage
+  - name: deploy (test)
+    image: 72636c/stratus:latest-alpine
+    commands:
+      - stratus deploy
+    depends_on:
+      - stage (test)
+    environment:
+      <<: *environment
+      ENVIRONMENT: test
+    pull: always
+    when:
+      event:
+        - pull_request
+
+  - name: stage (prod)
     image: 72636c/stratus:latest-alpine
     commands:
       - stratus stage
+    depends_on:
+      - stage (test)
     environment:
-      AWS_ACCESS_KEY_ID:
-        from_secret: aws_access_key_id
-      AWS_REGION: ap-southeast-2
-      AWS_SECRET_ACCESS_KEY:
-        from_secret: aws_secret_access_key
+      <<: *environment
       ENVIRONMENT: prod
     pull: always
     when:
       event:
         - pull_request
 
-  - name: deploy
+  - name: deploy (prod)
     image: 72636c/stratus:latest-alpine
     commands:
       - stratus deploy
     environment:
-      AWS_ACCESS_KEY_ID:
-        from_secret: aws_access_key_id
-      AWS_REGION: ap-southeast-2
-      AWS_SECRET_ACCESS_KEY:
-        from_secret: aws_secret_access_key
+      <<: *environment
       ENVIRONMENT: prod
     pull: always
     when:
@@ -60,4 +71,4 @@ steps:
 
 ---
 kind: signature
-hmac: 4f462f006486c57a5396f8920bad7784dd50dbb1bd271e24ecfee31eceb949a1
+hmac: a4519351ad3dacfe173eb37de248f941e3ce7f37778d3f300f0d4cb54d6c0317
