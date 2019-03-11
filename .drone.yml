@@ -16,7 +16,7 @@ x-defaults:
 
 steps:
   - name: stage (test)
-    image: 72636c/stratus:latest-base
+    image: 72636c/stratus:base
     commands:
       - stratus stage
     environment:
@@ -28,7 +28,7 @@ steps:
         - pull_request
 
   - name: deploy (test)
-    image: 72636c/stratus:latest-base
+    image: 72636c/stratus:base
     commands:
       - stratus deploy
     depends_on:
@@ -42,7 +42,7 @@ steps:
         - pull_request
 
   - name: stage (prod)
-    image: 72636c/stratus:latest-base
+    image: 72636c/stratus:base
     commands:
       - stratus stage
     depends_on:
@@ -56,7 +56,7 @@ steps:
         - pull_request
 
   - name: deploy (prod)
-    image: 72636c/stratus:latest-base
+    image: 72636c/stratus:base
     commands:
       - stratus deploy
     environment:
@@ -71,4 +71,4 @@ steps:
 
 ---
 kind: signature
-hmac: ec46fface92295c2435fdc40f6e2ebfce5be2a41ac061141448d2fee999fec9f
+hmac: 098f04b5072ce1b35c3eddd8ad4fc644cb6563c4c73cbce46b1bcea3cfaffbdf
