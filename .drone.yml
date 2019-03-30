@@ -15,10 +15,12 @@ x-defaults:
       from_secret: aws_secret_access_key
 
 steps:
-  - name: stage (test)
+  - name: stage artefacts (test)
     image: 72636c/stratus:base
     commands:
-      - stratus stage
+      - stratus --name {{env:ENVIRONMENT}}-aws-bedrock-artefacts stage
+    depends_on:
+      - clone
     environment:
       <<: *environment
       ENVIRONMENT: test
@@ -27,12 +29,12 @@ steps:
       event:
         - pull_request
 
-  - name: deploy (test)
+  - name: stage cicd (test)
     image: 72636c/stratus:base
     commands:
-      - stratus deploy
+      - stratus --name {{env:ENVIRONMENT}}-aws-bedrock-cicd stage
     depends_on:
-      - stage (test)
+      - clone
     environment:
       <<: *environment
       ENVIRONMENT: test
@@ -41,12 +43,68 @@ steps:
       event:
         - pull_request
 
-  - name: stage (prod)
+  - name: stage dns (test)
     image: 72636c/stratus:base
     commands:
-      - stratus stage
+      - stratus --name {{env:ENVIRONMENT}}-aws-bedrock-dns stage
     depends_on:
-      - stage (test)
+      - clone
+    environment:
+      <<: *environment
+      ENVIRONMENT: test
+    pull: always
+    when:
+      event:
+        - pull_request
+
+  - name: deploy artefacts (test)
+    image: 72636c/stratus:base
+    commands:
+      - stratus --name {{env:ENVIRONMENT}}-aws-bedrock-artefacts deploy
+    depends_on:
+      - stage artefacts (test)
+    environment:
+      <<: *environment
+      ENVIRONMENT: test
+    pull: always
+    when:
+      event:
+        - pull_request
+
+  - name: deploy cicd (test)
+    image: 72636c/stratus:base
+    commands:
+      - stratus --name {{env:ENVIRONMENT}}-aws-bedrock-cicd deploy
+    depends_on:
+      - stage cicd (test)
+    environment:
+      <<: *environment
+      ENVIRONMENT: test
+    pull: always
+    when:
+      event:
+        - pull_request
+
+  - name: deploy dns (test)
+    image: 72636c/stratus:base
+    commands:
+      - stratus --name {{env:ENVIRONMENT}}-aws-bedrock-dns deploy
+    depends_on:
+      - stage dns (test)
+    environment:
+      <<: *environment
+      ENVIRONMENT: test
+    pull: always
+    when:
+      event:
+        - pull_request
+
+  - name: stage artefacts (prod)
+    image: 72636c/stratus:base
+    commands:
+      - stratus --name {{env:ENVIRONMENT}}-aws-bedrock-artefacts stage
+    depends_on:
+      - stage artefacts (test)
     environment:
       <<: *environment
       ENVIRONMENT: prod
@@ -55,10 +113,72 @@ steps:
       event:
         - pull_request
 
-  - name: deploy (prod)
+  - name: stage cicd (prod)
     image: 72636c/stratus:base
     commands:
-      - stratus deploy
+      - stratus --name {{env:ENVIRONMENT}}-aws-bedrock-cicd stage
+    depends_on:
+      - stage cicd (test)
+    environment:
+      <<: *environment
+      ENVIRONMENT: prod
+    pull: always
+    when:
+      event:
+        - pull_request
+
+  - name: stage dns (prod)
+    image: 72636c/stratus:base
+    commands:
+      - stratus --name {{env:ENVIRONMENT}}-aws-bedrock-dns stage
+    depends_on:
+      - stage dns (test)
+    environment:
+      <<: *environment
+      ENVIRONMENT: prod
+    pull: always
+    when:
+      event:
+        - pull_request
+
+  - name: deploy artefacts (prod)
+    image: 72636c/stratus:base
+    commands:
+      - stratus --name {{env:ENVIRONMENT}}-aws-bedrock-artefacts deploy
+    depends_on:
+      - clone
+    environment:
+      <<: *environment
+      ENVIRONMENT: prod
+    pull: always
+    when:
+      branch:
+        - master
+      event:
+        - push
+
+  - name: deploy cicd (prod)
+    image: 72636c/stratus:base
+    commands:
+      - stratus --name {{env:ENVIRONMENT}}-aws-bedrock-cicd deploy
+    depends_on:
+      - clone
+    environment:
+      <<: *environment
+      ENVIRONMENT: prod
+    pull: always
+    when:
+      branch:
+        - master
+      event:
+        - push
+
+  - name: deploy dns (prod)
+    image: 72636c/stratus:base
+    commands:
+      - stratus --name {{env:ENVIRONMENT}}-aws-bedrock-dns deploy
+    depends_on:
+      - clone
     environment:
       <<: *environment
       ENVIRONMENT: prod
@@ -71,4 +191,4 @@ steps:
 
 ---
 kind: signature
-hmac: 098f04b5072ce1b35c3eddd8ad4fc644cb6563c4c73cbce46b1bcea3cfaffbdf
+hmac: 4cee0562d6319892266f0001228bcf5f49bfaca502fd13b63eb572b7eef4df95
