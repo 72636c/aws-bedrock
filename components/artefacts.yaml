@@ -15,8 +15,8 @@ Resources:
     Properties:
       BucketEncryption:
         ServerSideEncryptionConfiguration:
-          - ServerSideEncryptionByDefault:
-              KMSMasterKeyID: !Ref Key
+          - BucketKeyEnabled: true
+            ServerSideEncryptionByDefault:
               SSEAlgorithm: aws:kms
       BucketName: !Sub ${AWS::AccountId}-${AWS::Region}-${Environment}-artefacts
       PublicAccessBlockConfiguration:
@@ -32,28 +32,8 @@ Resources:
       Type: String
       Value: !Ref Bucket
 
-  Key:
-    Type: AWS::KMS::Key
-    Properties:
-      Description: !Sub Artefacts (${Environment})
-      EnableKeyRotation: true
-      KeyPolicy:
-        Statement:
-          - Action: kms:*
-            Effect: Allow
-            Principal:
-              AWS: !Ref AWS::AccountId
-            Resource: '*'
-            Sid: Allow access for Key Administrators
-        Version: '2012-10-17'
-
 Outputs:
   BucketArn:
     Export:
       Name: !Sub ${Environment}:artefacts:bucket-arn
     Value: !GetAtt Bucket.Arn
-
-  KeyArn:
-    Export:
-      Name: !Sub ${Environment}:artefacts:key-arn
-    Value: !GetAtt Key.Arn
